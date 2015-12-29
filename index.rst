@@ -4,12 +4,10 @@ Welcome to OWASP CRS Documentation's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
-   intro
-   rules
-
-
+   quickstart
+   install
 
 Indices and tables
 ==================
