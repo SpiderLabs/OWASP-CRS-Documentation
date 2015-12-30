@@ -1,13 +1,6 @@
 =====================
 Installing OWASP CRS
 =====================
-
-Contents:
-
-.. toctree::
-   :maxdepth: 1
-   
-   intro
    
 We are glad you choose OWASP CRS the premier free ModSecurity ruleset. Below you should find all the information you need to properly install CRS. If you are having problems feel free to reach out to our mailing list. You can signup at: https://lists.owasp.org/mailman/listinfo/owasp-modsecurity-core-rule-set
    

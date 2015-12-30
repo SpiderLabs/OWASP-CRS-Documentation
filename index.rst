@@ -1,18 +1,24 @@
-Welcome to OWASP CRS Documentation's documentation!
+OWASP Core Rule Set: Documentation
 ===================================================
 
-Contents:
+Deployment:
 
 .. toctree::
    :maxdepth: 1
    
    quickstart
+   intro
    install
+   rules
+   exceptions
 
-Indices and tables
-==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+Development:
+   
+.. toctree::
+   :maxdepth: 1
+   
+   ruleid
+
 

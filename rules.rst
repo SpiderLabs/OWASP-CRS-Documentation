@@ -1,9 +1,2 @@
-Welcome to OWASP CRS Documentation's documentation!
+What's In The Rules
 ===================================================
-
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-   
-   intro

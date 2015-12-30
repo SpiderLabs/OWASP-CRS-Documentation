@@ -1,9 +1,2 @@
-Welcome to OWASP CRS Documentation's documentation!
+Adding Exceptions and Tuning CRS
 ===================================================
-
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-   
-   intro
