@@ -2,7 +2,7 @@
 Installing OWASP CRS
 =====================
    
-We are glad you choose OWASP CRS the premier free ModSecurity ruleset. Below you should find all the information you need to properly install CRS. If you are having problems feel free to reach out to our mailing list. You can signup at: https://lists.owasp.org/mailman/listinfo/owasp-modsecurity-core-rule-set
+We are glad you chose OWASP CRS the premier free ModSecurity ruleset. Below you should find all the information you need to properly install CRS. If you are having problems feel free to reach out to our mailing list. You can signup at: https://lists.owasp.org/mailman/listinfo/owasp-modsecurity-core-rule-set
    
 Prerequisites
 =============
@@ -71,7 +71,15 @@ If you were to look at the CRS files, you'd note there are quite a few .conf fil
 
 Configuring CRS
 ===============
-todo:
+Going through the configuration file (modsecurity_crs_10_setup.conf.example) and reading what the different options are is HIGHLY recommended. At minimum you should keep in mind the following.
+
+* CRS does not configure ModSecurity features such as the rule engine, the audit engine, logging etc. This task is part of the ModSecurity initial setup.If you haven't done this yet please check out the recommended ModSecurity configuration at https://github.com/SpiderLabs/ModSecurity/blob/master/modsecurity.conf-recommended 
+* By default (SecDefaultAction) CRS will redirect to your local domain when an alert is triggered. This may cause redirect loops depending on your configuration. Take some time to decide what you want ModSecurity it do (drop the packet, return a status:403, go to a custom page etc.) when it detects malicious activity.
+* Make sure to configure your anomaly scoring thresholds for more information see [[anomaly scoring]]
+* By default ModSecurity looks for lots of issues with different databases and languages, if you are running a specific environment, you probably want to limit this behaviour for performance reasons.
+* ModSecurity supports Project Honeypot (http://www.projecthoneypot.org/index.php) blacklists. This is a great project and all you need to do to leverage it is sign up for an API key (http://www.projecthoneypot.org/httpbl_api.php)
+* Do make sure you have added any methods, static resources, content types, or file extensions that your site needs beyond the basic ones listed.
+
 
 Setting up automated updated
 ============================
