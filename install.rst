@@ -67,7 +67,7 @@ git clone https://github.com/SpiderLabs/owasp-modsecurity-crs
 
 Typically when you either clone or download the zip you'll end up with a folder named something similar to 'owasp-modsecurity-crs'. From here the process is surprisingly simple. Because OWASP CRS is, at its core, a set of ModSecurity configuration files (*.conf files) all you have to do is tell ModSecurity where these CRS configuration files reside and it will do MOST of the remaining work. To do this you must use the 'Include' directive. This include directive can be used in similar places to where we used our SecRule earlier. Both ModSecurity 2.x (via APR) and ModSecurity 3.x support this directive and what it tells the ModSecurity core to do is parse the additional files for ModSecurity directives. 
 But where do you place this folder for it to be included?
-If you were to look at the CRS files, you'd note there are quite a few .conf files. While the names attempt to do a good job at describing what each file does additional information is available in the [[rules]] section. Fortunately, you don't manually have to include each and every configuration file. The include directive supports the wildcard character (*). Typically this means that you would 
+If you were to look at the CRS files, you'd note there are quite a few .conf files. While the names attempt to do a good job at describing what each file does additional information is available in the :doc:`rules` section. Fortunately, you don't manually have to include each and every configuration file. The include directive supports the wildcard character (*). Typically this means that you would 
 
 Configuring CRS
 ===============
@@ -75,11 +75,12 @@ Going through the configuration file (modsecurity_crs_10_setup.conf.example) and
 
 * CRS does not configure ModSecurity features such as the rule engine, the audit engine, logging etc. This task is part of the ModSecurity initial setup.If you haven't done this yet please check out the recommended ModSecurity configuration at https://github.com/SpiderLabs/ModSecurity/blob/master/modsecurity.conf-recommended 
 * By default (SecDefaultAction) CRS will redirect to your local domain when an alert is triggered. This may cause redirect loops depending on your configuration. Take some time to decide what you want ModSecurity it do (drop the packet, return a status:403, go to a custom page etc.) when it detects malicious activity.
-* Make sure to configure your anomaly scoring thresholds for more information see [[anomaly scoring]]
+* Make sure to configure your anomaly scoring thresholds for more information see :doc:`anomaly`
 * By default ModSecurity looks for lots of issues with different databases and languages, if you are running a specific environment, you probably want to limit this behaviour for performance reasons.
 * ModSecurity supports Project Honeypot (http://www.projecthoneypot.org/index.php) blacklists. This is a great project and all you need to do to leverage it is sign up for an API key (http://www.projecthoneypot.org/httpbl_api.php)
 * Do make sure you have added any methods, static resources, content types, or file extensions that your site needs beyond the basic ones listed.
 
+For more information please see the page on :doc:`configuration`
 
 Setting up automated updated
 ============================

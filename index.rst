@@ -8,8 +8,10 @@ Deployment:
    
    quickstart
    install
+   configuration
    rules
    exceptions
+   anomaly
    support
 
 
