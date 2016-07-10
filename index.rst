@@ -11,9 +11,10 @@ Deployment:
    configuration
    rules
    exceptions
+   testing
    anomaly
    support
-
+   making
 
 
 Development:
