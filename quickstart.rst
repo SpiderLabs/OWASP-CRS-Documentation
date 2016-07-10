@@ -10,13 +10,14 @@ You'll first need to download the ruleset. Using a browser (or equivalent) visit
 
 	wget https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/master.zip
 
-Once this is installed extract it somewhere well known on your server. Typically this will be in the webserver directory (we are demonstrating with Apache below)
+Once this is installed extract it somewhere well known on your server. Typically this will be in the webserver directory. We are demonstrating with Apache below For information on configuring Nginx or IIS see :doc:`install`. Additionally, while it is a successful practice to make a new 'modsecurity.d' folder as outlined below, it isn't strictly necessary. The path scheme outlined is the common to RHEL based operating systems, you may have to adjust the Apache path used to match your installation.
 
 .. code-block:: bash
 	
-	mv owasp-modsecurity-crs-master.zip /etc/httpd/
-	cd /etc/httpd/
-	unzip owasp-modsecurity-crs-master.zip -d owasp-modsecurity-crs
+    mkdir /etc/httpd/modsecurity.d
+    mv owasp-modsecurity-crs-master.zip /etc/httpd/modsecurity.d/
+    cd /etc/httpd/modsecurity.d
+    unzip owasp-modsecurity-crs-master.zip -d owasp-modsecurity-crs
 
 
 After extracting the rule set we have to set up the main OWASP configuration file. We provide an example configuration file as part of the package (Note: Other aspects of ModSecurity are controlled by the recommended ModSecurity configuration rules, packaged with ModSecurity) located in the main directory: modsecurity_crs_10_setup.conf.example. For many people this will be a good enough starting point but you should take the time to look through this file before deploying it to make sure it's right for your environment. For more information see :doc:`configuration`. 
@@ -25,10 +26,10 @@ Once you have changed any settings within the configuration file, as needed, you
 	
 .. code-block:: bash
 	
-	cd /etc/httpd/owasp-modsecurity-crs/
+	cd /etc/httpd/modsecurity.d/owasp-modsecurity-crs/
 	mv modsecurity_crs_10_setup.conf.example modsecurity_crs_10_setup.conf
 	
-Only one more step! We now have to tell our web server where our rules are. We do this by including the rule configuration files. Again we are demonstrating using Apache but it is similar on other systems see the :doc:`install` page for details.
+Only one more step! We now have to tell our web server where our rules are. We do this by including the rule configuration files in our httpd.conf file. Again, we are demonstrating using Apache but it is similar on other systems see the :doc:`install` page for details.
 
 .. code-block:: bash
 	

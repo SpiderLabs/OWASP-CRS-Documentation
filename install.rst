@@ -19,8 +19,10 @@ Windows IIS with ModSecurity 2.x
 By a LARGE majority the most common deployment of ModSecurity for IIS is via the pre-packaged MSI installer (If you compiled ModSecurity for IIS this documentation isn't for you). If you used this to install ModSecurity 2.x on IIS (tested on IIS 7-10), then your configuration files are located within C:\Program Files\ModSecurity IIS\modsecurity_iis.conf (this may be Program Files(x86) depending on your configuration). This modsecurity_iis.conf will be parsed by the ModSecurity core for ModSecurity and 'Include' directives.
 By default all installations of ModSecurity without 'SecRuleEngine' started will start in DETECTIONONLY mode (which is pretty self explanatory). As a result any rule we make will only show up in the Windows Event Viewer by default. For our example we're going to turn on disruptive actions. To test we should add the following to our modsecurity_iis.conf:
 
-SecRuleEngine On
-SecRule ARGS:testparam "@contains test" "id:1234,deny,status:403,msg:'Our test rule has triggered'"
+.. code-block:: bash
+
+    SecRuleEngine On
+    SecRule ARGS:testparam "@contains test" "id:1234,deny,status:403,msg:'Our test rule has triggered'"
 
 This rule will be triggered when you go to your web page and pass the testparam (via either GET or POST) with the test value. This typically will looks similar to the following: http://localhost/?testparam=test. If all went well you should see an HTTP 403 ModSecurity ACtion page in your browser when you navigate to the site in question. Additionally, in your Event Viewer, under 'Windows Logs'->'Application', we should see a new log that looks like the following:
 
@@ -32,8 +34,10 @@ Apache 2.x with ModSecurity 2.x Compiled
 ----------------------------------------
 Compiling ModSecurity is easy, but slightly outside the scope of this document. If you are interested in learning how to compile ModSecurity please go to the ModSecurity documentation. Having compiled ModSecurity there is a simple test to see if your installation is working. Typically if you compiled your own ModSecurity module you will not have split up your Apache configuration in any compilcated manner, often, all your configuration is located in httpd.conf. Anywhere after you load your module (typically done in httpd.conf by using 'LoadModule security2_module modules/mod_security2.so') you may add the following ModSecurity directives. 
 
-SecRuleEngine On
-SecRule ARGS:testparam "@contains test" "id:1234,deny,status:403,msg:'Our test rule has triggered'"
+.. code-block:: bash
+
+    SecRuleEngine On
+    SecRule ARGS:testparam "@contains test" "id:1234,deny,status:403,msg:'Our test rule has triggered'"
 
 If you restart Apache you may now navigate to any page on your web server passing the parameter 'testparam' with the value 'test' (via post or get) and you should receive a 403. This request will typically appear similar to as follows: http://localhost/?testparam=test.
 
@@ -46,8 +50,10 @@ Apache 2.x with ModSecurity 2.x Packaged
 Many operating systems provide package managers in order to aid in the install of software packages and their associated dependencies. Even though ModSecurity is relatively straight forward to install, some people prefer using package managers due to their ease. It should be noted here that many package managers do not up date their releases very frequently, as a result it is quite likely that your distribution may be missing required features or possibly even have security vulnerabilities. Additionally, depending on your package/package manager your ModSecurity configuration will be laid out slightly different.
 On Fedora we will find that when you use 'dnf install mod_security' you will receive the base ModSecurity package. Apache's configuration files are split out within this environment such that there are different folders for the base config (etc/httpd/config/), user configuration (etc/httpd/conf.d/, and module configuration (/etc/httpd/conf.modules.d/). The Fedora ModSecurity 2.x package places the LoadModule and associated 'Include's within /etc/httpd/conf.modules.d/10-mod_security.conf. Additionally, it places some of the reccomended default rules in /etc/httpd/conf.d/mod_security.conf. It is this secondary configuration file that will setup the locations where you should add your rules. By default it reads in all config files from the /etc/httpd/modsecurity.d/ and /etc/httpd/modsecurity.d/activated_rules/ folder. To keep order I would reccomend testing this configuration by placing a rules.conf file within the activiated_rules folder. Within this rules.conf file add the following:
 
-SecRuleEngine On
-SecRule ARGS:testparam "@contains test" "id:1234,deny,status:403,msg:'Our test rule has triggered'"
+.. code-block:: bash
+
+    SecRuleEngine On
+    SecRule ARGS:testparam "@contains test" "id:1234,deny,status:403,msg:'Our test rule has triggered'"
 
 Upon saving and restarting Apache (systemctl restart httpd.service) you should be able to navigate to a your local webserver. Once this is accomplished try passing the 'testparam' paramater with the value 'test' such as via the following URL:http://localhost/?testparam=test. YOu should receive a 403 Forbidden status. If you do congratulations, ModSecurity is ready for the OWASP CRS rules. Proceed to....
 
@@ -63,7 +69,9 @@ Proceeding with the Install
 ===========================
 Now that you know where your rules belong typically we'll want to download the OWASP CRS. The best place to get the latest copy of the ruleset will be from our Github: https://github.com/SpiderLabs/owasp-modsecurity-crs. Be careful to determine if there are any more relevant branches in development that can more aptly take advantage of the version of ModSecurity you are using. You can do this by checking the different branches on the site and looking throughout this documentation. To download a repository you can either click the 'Download ZIP' button or your can use git clone. For instance, 
 
-git clone https://github.com/SpiderLabs/owasp-modsecurity-crs
+.. code-block:: bash
+
+    git clone https://github.com/SpiderLabs/owasp-modsecurity-crs
 
 Typically when you either clone or download the zip you'll end up with a folder named something similar to 'owasp-modsecurity-crs'. From here the process is surprisingly simple. Because OWASP CRS is, at its core, a set of ModSecurity configuration files (*.conf files) all you have to do is tell ModSecurity where these CRS configuration files reside and it will do MOST of the remaining work. To do this you must use the 'Include' directive. This include directive can be used in similar places to where we used our SecRule earlier. Both ModSecurity 2.x (via APR) and ModSecurity 3.x support this directive and what it tells the ModSecurity core to do is parse the additional files for ModSecurity directives. 
 But where do you place this folder for it to be included?
@@ -85,7 +93,137 @@ For more information please see the page on :doc:`configuration`
 Setting up automated updated
 ============================
 todo:
+The OWASP Core Rule Set is designed with the capability to be frequently updated in mind. New threats and techniques and updates are provided frequently as part of the rule set and as a result, in order to combat the latest threats effectivly it is imperative that constant updates should be part of your strategy.
 
-Problems with install?
-======================
-TODO:
+An update script
+----------------
+As part of our continuing effort to provide the most user friendly rule set available we provide an example script that you can use for updating your ruleset:
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+    """
+    This script is designed to allow users to automatically
+    update their ModSecurity OWASP Core Rule Set. It can
+    be called by a cronjob or scheduled task in order to
+    allow for automation. Note that it can either replace
+    the whole CRS directory or just update the rules folder,
+    which is the default.
+    """
+
+    from __future__ import print_function
+    import argparse
+    import os
+    import uuid
+    import shutil
+    import logging
+
+    try:
+        from git import Repo
+    except ImportError:
+        print("This script requires the GitPython module (pip install gitpython).")
+
+    __author__ = "Chaim Sanders"
+    __copyright__ = "Copyright 2016, Trustwave Inc"
+    __credits__ = ["Chaim Sanders"]
+    __license__ = "ASL 2.0"
+    __version__ = "1.0"
+    __maintainer__ = "Chaim Sanders"
+    __git__ = "csanders-git"
+    __status__ = "Production"
+
+    def check_arguments(logger):
+        """Control arguments and set args variable"""
+        example_string = "Examples: python %(prog)s --full -p ./owasp-modsecurity-crs/" \
+                         " or python %(prog)s --folder=util/ --path=./owasp-modsecurity-crs/util" \
+                         " or python %(prog)s"
+        parser = argparse.ArgumentParser(description='Update OWASP CRS rules',
+                                         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                         epilog=example_string)
+        parser.add_argument('-b', '--branch', default="v3.0.0-rc1", type=str,
+                            required=False, help='The GitHub branch you want to download.')
+        parser.add_argument('-r', '--repo',
+                            default="https://github.com/SpiderLabs/owasp-modsecurity-crs",
+                            type=str, required=False, help='The GitHub repository you want to use.')
+        parser.add_argument('-p', '--path', default="./owasp-modsecurity-crs/rules/", type=str,
+                            required=False, help='The path where the rules files should be placed')
+        group = parser.add_mutually_exclusive_group(required=False)
+        group.add_argument('--full', action='store_true',
+                           required=False,
+                           help='Copy the whole repo to the path specified instead of just the rules')
+        group.add_argument('--folder', default="rules/", type=str,
+                           required=False,
+                           help='The toplevel folder within the repo to copy. Can\'t be used with full')
+        parser.add_argument('-d', '--debug', action='store_true',
+                            required=False, help='Display debug logging.')
+        args = parser.parse_args()
+        if args.debug:
+            logger.setLevel(logging.DEBUG)
+            logger.debug("Debugging mode has been enabled.")
+        logger.debug("The following arguments were assigned: " + str(args) + ".")
+        return args
+
+    def download_rules(args, logger):
+        """Download and replace our rules"""
+        if args.path[-1] != os.path.sep:
+            dst_dir = args.path + os.path.sep
+        else:
+            dst_dir = args.path
+        logger.debug("The final path was set to " + str(dst_dir) + ".")
+        rand_fold = "./" + str(uuid.uuid4())
+        logger.debug("The temporary repo folder was set to " + str(rand_fold) + ".")
+        # If the user wants the whole directory set that otherwise just rules/
+        if args.full:
+            copy_fold = rand_fold
+        else:
+            copy_fold = rand_fold + os.path.sep + args.folder
+        logger.debug("Set the folder to be copied to " + copy_fold + ".")
+        Repo.clone_from(args.repo, rand_fold, branch=(args.branch))
+        logger.debug("Cloned the repo successfully.")
+        for src_dir, _, files in os.walk(copy_fold):
+            for file_ in files:
+                if file_[-8:] != ".example":
+                    src_file = os.path.join(src_dir, file_)
+                    # If its the full copy we need the new prefix path
+                    if args.full:
+                        copy_path = src_file.replace(rand_fold, "")[1:]
+                    else:
+                        # Remove the overlap in folders
+                        copy_path = src_file.replace(os.path.join(rand_fold, args.folder), "")
+                    dst_file = os.path.join(dst_dir, copy_path)
+                    cwd = os.path.dirname(dst_file)
+                    # Check if the directory structure exists
+                    if not os.path.exists(cwd):
+                        os.makedirs(cwd)
+                    if os.path.exists(dst_file):
+                        os.remove(dst_file)
+                        logger.debug("Removed existing " + dst_file + ".")
+                    try:
+                        shutil.move(src_file, cwd)
+                    except shutil.Error as exc:
+                        print(exc)
+                    logger.debug("Moved " + file_ + " to " + cwd + ".")
+        logger.debug("Copying completed successfully")
+        shutil.rmtree(rand_fold)
+        logger.debug("Deleted the temporary folder.")
+
+    def main():
+        """Initiate logging and run subroutines"""
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(os.path.basename(__file__))
+        args = check_arguments(logger)
+        download_rules(args, logger)
+
+    if __name__ == "__main__":
+        main()
+
+Problems with install
+=====================
+In Apache 2.4.x before 2.4.11 there is a bug where the use of line continuations in a config size may cause the line continuation to be truncated. This will lead to an error similar to the following:
+
+.. code-block:: bash
+	
+    Syntax error on line 24 of /etc/httpd/modsecurity.d/activated_rules/RESPONSE-50-DATA-LEAKAGES-PHP.conf:
+    Error parsing actions: Unknown action: \
+
+This is not an error with ModSecurity or OWASP CRS. In order to fix this issue you can simply add a space before the continuation on the offending line. For more information see https://bz.apache.org/bugzilla/show_bug.cgi?id=55910    
