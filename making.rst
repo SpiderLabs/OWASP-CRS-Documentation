@@ -6,7 +6,7 @@ The Basic Synatax
 =================
 
 A `SecRule <https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRule>`_  is a directive like any other understood by ModSecurity. The difference is that this directive is way more powerful in what it is capable of representing. Generally, a SecRule is made up of 4 parts:
-* Variables - Instructs ModSecurity *where* to look
+* Variables - Instructs ModSecurity *where* to look (sometimes called Targets)
 * Operators - Instructs ModSecurity *when* to trigger a match
 * Transformations - Instructs ModSecurity *how* it should normalize variable data
 * Actions - Instructs ModSecurity *what* to do if a rule matches
@@ -23,11 +23,11 @@ A very basic rule looks as follows:
 
     SecRule REQUEST_URI "@streq /index.php" "id:1,phase:1,t:lowercase,deny"
 
-The preceeding rule will take each HTTP Request and obtain just the URI portion. From there is will transform the URI value to lowercase. Subsequently it will check to see if that transformed value is equal to exactly '/index.php'. If it is Modsecurity will deny the request, that is, it will stop processing further rules and intercept the request.
+The preceding rule will take each HTTP Request and obtain just the URI portion. From there is will transform the URI value to lowercase. Subsequently it will check to see if that transformed value is equal to exactly '/index.php'. If it is Modsecurity will deny the request, that is, it will stop processing further rules and intercept the request.
 
 As can be seen from the previous explaination, one of the unique things about the SecRule directive is that each SecRule listed in your configuration is evaluated on each transaction. All the other ModSecurity directives are only evaluated at startup.
 
-Clearly, if this was all there was to SecRules it wouldn't be very powerful. In fact, there is a lot more. So much more that it is in fact a full fledged langague. The best place to find out about all the possible capabilities is via the `ModSecurity Reference Manual <https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual>`_. The following is just a glimpse of its capabilities:
+Clearly, if this was all there was to SecRules it wouldn't be very powerful. In fact, there is a lot more. So much more that it is in fact a full fledged language. The best place to find out about all the possible capabilities is via the `ModSecurity Reference Manual <https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual>`_. The following is just a glimpse of its capabilities:
 
 There are ~105 **variables** in 6 different categories, some examples include:
 
@@ -87,7 +87,7 @@ It is possible to access just an index of a collection as well. This makes addre
 
     SecRule ARGS_GET:username "@contains admin" "id:1,phase:1,t:lowercase,deny"   
 
-One operator is nice but what if I have to apply one operator on multiple rules, for instance I want to check GET parameters and COOKIES. ModSecurity provides a way for you to do this. You can use the '|' (pipe) to combine two VARIABLES into one rule. This pipe can be applied as many times as you want. In the example below we combine both GET and POST arguments. In fact, this is not neccessary in reality as there is a built in ARGS collections that already does this.
+One operator is nice but what if I have to apply one operator on multiple rules, for instance I want to check GET parameters and COOKIES. ModSecurity provides a way for you to do this. You can use the '|' (pipe) to combine two VARIABLES into one rule. This pipe can be applied as many times as you want. In the example below we combine both GET and POST arguments. In fact, this is not necessary in reality as there is a built in ARGS collections that already does this.
 
 .. code-block:: bash
 
@@ -101,7 +101,7 @@ If you are having a problem where one of your variables is causing false positiv
     
 Advanced Transformation Usage
 =============================
-The concept of transformations is very intuative and thanks to ModSecurity's open source nature there are quite a few to choose from. An issue arises in that the proper application of transformations often takes knowledge about how the threat you are trying to stop can manifest itself. Imagine the following example - you are trying to detect an XSS (Cross Site Scripting) attack. 
+The concept of transformations is very intuitive and thanks to ModSecurity's open source nature there are quite a few to choose from. An issue arises in that the proper application of transformations often takes knowledge about how the threat you are trying to stop can manifest itself. Imagine the following example - you are trying to detect an XSS (Cross Site Scripting) attack. 
 
 Your first attempt looks like the following:
     
@@ -121,13 +121,13 @@ This too can be easily bypassed by simply appending a space ?x=<sCript >alert(1)
     
     SecRule ARGS "@contains <script>" "id:1,deny,status:403,t:lowercase,t:removeWhitespace"
 
-In many contexts HTML entities might be interpretted and converted back to their ASCII form. That would allow us to by pass this rule with something like &lt;sCript >alert(1);</script>. 
+In many contexts HTML entities might be interpreted and converted back to their ASCII form. That would allow us to by pass this rule with something like &lt;sCript >alert(1);</script>. 
 
 .. code-block:: bash
     
     SecRule ARGS "@contains <script>" "id:1,deny,status:403,t:lowercase,t:removeWhitespace,t:htmlEntityDecode"
 
-As you can see this type of approach can go on for a while and is why OWASP CRS is important. We put our rules out there and continously allow people to test them. If they find an issue we fix it and the cycle continues. This attempt to blacklist malicious attacks is a constant battle, it is always encouraged that you whitelist where available. Currently if you look at CRS you'll see there are many XSS rules. Each rule may have 5 or 6 different transformations and the operators get more complex all the time.
+As you can see this type of approach can go on for a while and is why OWASP CRS is important. We put our rules out there and continuously allow people to test them. If they find an issue we fix it and the cycle continues. This attempt to blacklist malicious attacks is a constant battle, it is always encouraged that you whitelist where available. Currently if you look at CRS you'll see there are many XSS rules. Each rule may have 5 or 6 different transformations and the operators get more complex all the time.
 
 Advanced Action Usage
 =====================
@@ -135,7 +135,7 @@ Advanced Action Usage
 
 Advanced Operator Usage
 =======================
-Most OPERATORS are self explanitory. Many operators such as the string manipulation operators take arguments. Some operators such as the libinjection @detectXSS do not. In general the symantecs for most OPERATORS is quite straight forward. The exception to this rule is the default operator @rx, or regular expressions. Even if you know how to use regular expression, it is still quite easy to make a mistake in a security context. When writing a rule remember the following guidelines:
+Most OPERATORS are self explanatory. Many operators such as the string manipulation operators take arguments. Some operators such as the libinjection @detectXSS do not. In general the semantics for most OPERATORS is quite straight forward. The exception to this rule is the default operator @rx, or regular expressions. Even if you know how to use regular expression, it is still quite easy to make a mistake in a security context. When writing a rule remember the following guidelines:
 
 * Regexp should avoid using ^ (alternative: \A) and $ (alternative: \Z) symbols, which are metacharacters for start and end of a string. It is possible to bypass regex by inserting any symbol in front or after regexp.
 * Regexp should be case-insensitive. It is possible to bypass regex using upper or lower cases in words. Modsecurity transformation commands (which are applied on string before regex pattern is applied) can also be included in tests to cover more regexps [51].
@@ -147,4 +147,3 @@ Most OPERATORS are self explanitory. Many operators such as the string manipulat
 * Regexp should be applied to right scope of inputs: Cookies names and values, Argument names and values, Header names and values, Files argument names and content.
 * Regular expression writers should be careful while using only whitespace character (%20) for separating tag attributes. Rule can be bypassed with newline character: i.e. %0d,%0a.
 * Greediness of regular expressions should be considered. Highlight of this topic is well done in Chapter 9 of Jan Goyvaert’s tutorial [27]. While greediness itself does not create bypasses, bad implementation of regexp Greediness can raise False Positive rate. This can cause excessive log-file flooding, forcing vulnerable rule or even whole WAF to be switched off.
-
