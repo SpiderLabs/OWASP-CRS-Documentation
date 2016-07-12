@@ -2,12 +2,12 @@
 OWASP CRS Metadata
 ==================
 
-OWASP CRS 3.x includes several peices of metadata within rules. Not every rule features all metadata but it is a continuing project where possible to update this information to the best possible leve. If you see a rule without a peice of metadata that you think is warrented please open either an issue request at https://github.com/SpiderLabs/owasp-modsecurity-crs/issues or a pull request. 
+OWASP CRS 3.x includes several pieces of metadata within rules. Not every rule features all metadata but it is a continuing project where possible to update this information to the best possible level. If you see a rule without a piece of metadata that you think is warranted please open either an issue request at https://github.com/SpiderLabs/owasp-modsecurity-crs/issues or a pull request. 
 
 Tags about standards
 --------------------
 
-We try our best to outline information about the vulnerability when each rule triggers. To that end we include metadata about where that vulnerability type can be found in varoious standards. These tags are currently prefixed with the standard type and will be capitalized. They will NOT start with OWASP_CRS. They consist of a the standard and then a slash to indicate the start of the data. The following standards are supported:
+We try our best to outline information about the vulnerability when each rule triggers. To that end we include metadata about where that vulnerability type can be found in various standards. These tags are currently prefixed with the standard type and will be capitalized. They will NOT start with OWASP_CRS. They consist of a the standard and then a slash to indicate the start of the data. The following standards are supported:
 
 * WASCTC
 * OWASP_TOP_10
@@ -25,9 +25,9 @@ Starting with version 3.0 we reintroduced the paranoia level concept. For tuning
 Tags about rule classification
 ------------------------------
 
-There are two different types of tags regaurding rule classification. One type of tag carries over from CRS 2.x and one type has been added to CRS 3. The CRS 3 version can be more explanitory and allows for the capability to use SecRuleRemoveByTag more easily, whereas the CRS 2 versions give information in a more succicent manner and are used for anomaly scoring purposes.
+There are two different types of tags regarding rule classification. One type of tag carries over from CRS 2.x and one type has been added to CRS 3. The CRS 3 version can be more explanatory and allows for the capability to use SecRuleRemoveByTag more easily, whereas the CRS 2 versions give information in a more succinct manner and are used for anomaly scoring purposes.
 
-The CRS 2.x rule classifications are indicated by tags starting with 'OWASP_CRS'. They are deliminated by the forward slash (/) and will always have three parts. The sections get more specific as you progress through the string where the third section will always be the most specific. The following are a list of all the current CRS 2.x type tags that are used in CRS.
+The CRS 2.x rule classifications are indicated by tags starting with 'OWASP_CRS'. They are delimited by the forward slash (/) and will always have three parts. The sections get more specific as you progress through the string where the third section will always be the most specific. The following are a list of all the current CRS 2.x type tags that are used in CRS.
 
 .. code-block:: bash
 
@@ -72,7 +72,7 @@ The CRS 3.x type tagging is split over a series of tags:
 * platform
 * attack
 
-These tags all have additional information specified after a dash (-). In some cases, perticularly with attack there might be another dash that represents a more specific variant for instance attack-injection-php. In general anythign after the first dash can be treated as a string. If the category is general for a given rule the tag will have the data 'multi' an example would be a vulnerability that affects many different platforms. In this case the tag would look as follows:
+These tags all have additional information specified after a dash (-). In some cases, particularly with attack there might be another dash that represents a more specific variant for instance attack-injection-php. In general anything after the first dash can be treated as a string. If the category is general for a given rule the tag will have the data 'multi' an example would be a vulnerability that affects many different platforms. In this case the tag would look as follows:
 
 .. code-block:: bash
 
@@ -82,7 +82,6 @@ These tags all have additional information specified after a dash (-). In some c
 Additional rule information
 ---------------------------
 
-Often we will generate rules based on some presentation or article. In fact, sometimes the construction of the rule is done in such a way that it might not be naeivly clear how the rule works. In all of these cases comments will be left above the rule in question. Items like links will not appear within tag data.
+Often we will generate rules based on some presentation or article. In fact, sometimes the construction of the rule is done in such a way that it might not be naively clear how the rule works. In all of these cases comments will be left above the rule in question. Items like links will not appear within tag data.
 
 
- 
