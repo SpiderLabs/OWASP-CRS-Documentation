@@ -147,3 +147,9 @@ Most OPERATORS are self explanatory. Many operators such as the string manipulat
 * Regexp should be applied to right scope of inputs: Cookies names and values, Argument names and values, Header names and values, Files argument names and content.
 * Regular expression writers should be careful while using only whitespace character (%20) for separating tag attributes. Rule can be bypassed with newline character: i.e. %0d,%0a.
 * Greediness of regular expressions should be considered. Highlight of this topic is well done in Chapter 9 of Jan Goyvaert’s tutorial [27]. While greediness itself does not create bypasses, bad implementation of regexp Greediness can raise False Positive rate. This can cause excessive log-file flooding, forcing vulnerable rule or even whole WAF to be switched off.
+
+Rules for CRS
+=============
+All rules for CRS should include at least one regression test. To increase the chances of having your pull request accepted into the mainline more regression tests are recommended.
+
+If your rule contains combination of data sources into a single regular expression for performance reasons you should document the use of the regexp-assemble command in the comments above your command. You should also include your independent sources within this util directory. Doing so increases overall maintainability. 
