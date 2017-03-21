@@ -98,7 +98,7 @@ Typically you'll end up with a folder named something similar to 'owasp-modsecur
 
 Setup OWASP CRS
 =====================
-OWASP CRS contains one setup file that should be reviewed prior to completing setup. The setup file is the only configuration file within the root 'owasp-crs-modsecurity' folder and is named modsecurity_crs_10_setup.conf.example. Going through the configuration file (modsecurity_crs_10_setup.conf.example) and reading what the different options are is HIGHLY recommended. At minimum you should keep in mind the following.
+OWASP CRS contains one setup file that should be reviewed prior to completing setup. The setup file is the only configuration file within the root 'owasp-crs-modsecurity' folder and is named csr-setup.conf.example. Going through the configuration file (csr-setup.conf.example) and reading what the different options are is HIGHLY recommended. At minimum you should keep in mind the following.
 
 * CRS does not configure ModSecurity features such as the rule engine, the audit engine, logging etc. This task is part of the ModSecurity initial setup.If you haven't done this yet please check out the recommended ModSecurity configuration at https://github.com/SpiderLabs/ModSecurity/blob/master/modsecurity.conf-recommended 
 * By default (`SecDefaultAction <https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecDefaultAction>`_) CRS will redirect to your local domain when an alert is triggered. This may cause redirect loops depending on your configuration. Take some time to decide what you want ModSecurity it do (drop the packet, return a status:403, go to a custom page etc.) when it detects malicious activity.
@@ -111,9 +111,9 @@ For more information please see the page on :doc:`configuration`. Once you have 
 
 .. code-block:: bash
 
-    mv modsecurity_crs_10_setup.conf.example modsecurity_crs_10_setup.conf
+    mv csr-setup.conf.example csr-setup.conf
 
-In addition to modsecurity_crs_10_setup.conf.example there are two other .example files within our repository. These files are: rules/REQUEST-00-LOCAL-WHITELIST.conf.example and rules/RESPONSE-99-EXCEPTIONS.conf.example. These files are designed to provide the rule maintainer the capability to modify rules (see :doc:`exceptions`) without breaking forward compatability with updates. As such you should rename these two files, removing the .example suffix. This will make it so that even when updates are installed they do not overwrite your custom updates. To rename the files in Linux one would use a command similar to the following:
+In addition to csr-setup.conf.example there are two other .example files within our repository. These files are: rules/REQUEST-00-LOCAL-WHITELIST.conf.example and rules/RESPONSE-99-EXCEPTIONS.conf.example. These files are designed to provide the rule maintainer the capability to modify rules (see :doc:`exceptions`) without breaking forward compatability with updates. As such you should rename these two files, removing the .example suffix. This will make it so that even when updates are installed they do not overwrite your custom updates. To rename the files in Linux one would use a command similar to the following:
 
 .. code-block:: bash
 
@@ -135,7 +135,7 @@ Apache will include from the Apache Root directory (/etc/httpd/, /etc/apache2/, 
 
     <IfModule security2_module>
             Include modsecurity.d/modsecurity.conf
-            Include modsecurity.d/owasp-modsecurity-crs/modsecurity_crs_10_setup.conf
+            Include modsecurity.d/owasp-modsecurity-crs/csr-setup.conf
             Include modsecurity.d/owsp-modsecurity-crs/rules/*.conf
     </IfModule>
     
@@ -146,7 +146,7 @@ Nginx will include from the Nginx conf directory (/usr/local/nginx/conf/ dependi
 .. code-block:: bash
 
     include modsecurity.conf
-    include owasp-modsecurity-crs/modsecurity_crs_10_setup.conf
+    include owasp-modsecurity-crs/csr-setup.conf
     include owasp-modsecurity-crs/rules/REQUEST-00-LOCAL-WHITELIST.conf
     include owasp-modsecurity-crs/rules/REQUEST-01-COMMON-EXCEPTIONS.conf
     include owasp-modsecurity-crs/rules/REQUEST-10-IP-REPUTATION.conf
