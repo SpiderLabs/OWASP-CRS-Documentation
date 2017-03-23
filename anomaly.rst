@@ -2,7 +2,7 @@
 Anomaly Scoring Mode
 ====================
 
-OWASP CRS version 3.x allows users to quickly switch between Traditional and Anomaly Scoring detection modes. The default starting with CRS 3.x is Anomaly Scoring mode. Within the modsecurity_crs_10_config.conf.example file there are two settings to control which mode your CRS instance will work in. Within this file, you can also control the following related CRS items: 
+OWASP CRS version 3.x allows users to quickly switch between Traditional and Anomaly Scoring detection modes. The default starting with CRS 3.x is Anomaly Scoring mode. Within the csr-setup.conf.example file there are two settings to control which mode your CRS instance will work in. Within this file, you can also control the following related CRS items: 
 
 * Anomaly Scoring Severity Levels
 * Anomaly Scoring Threshold Levels (Blocking)
@@ -19,7 +19,7 @@ Traditional Detection Mode (or IDS/IPS mode) is the old default operating mode. 
 Configuring Traditional Mode
 ----------------------------
 
-If you want to run the CRS in Traditional mode, you can do this easily by modifying the SecDefaultAction directive in the modsecurity_crs_10_config.conf file to use a disruptive action other than the default 'pass', such as deny:
+If you want to run the CRS in Traditional mode, you can do this easily by modifying the SecDefaultAction directive in the csr-setup.conf file to use a disruptive action other than the default 'pass', such as deny:
 
 .. code-block:: bash
 
@@ -54,7 +54,7 @@ Within anamoly scoring mode we are implementing the concept of Collaborative Det
 Configuring Anomaly Scoring Mode
 --------------------------------
 
-The default mode in CRS 3.x is Anomaly Scoring mode, you can verify this is your mode by checking that the SecDefaultAction line in the modsecurity_crs_10_config.conf file usees the pass action:
+The default mode in CRS 3.x is Anomaly Scoring mode, you can verify this is your mode by checking that the SecDefaultAction line in the csr-setup.conf file usees the pass action:
 
 .. code-block:: bash
 
@@ -100,7 +100,7 @@ Each rule has a severity level specified.  We have updated the rules to allow fo
     setvar:tx.anomaly_score=+%{tx.critical_anomaly_score},\
     setvar:tx.sql_injection_score=+%{tx.critical_anomaly_score},\
 
-This adds a variable amount, tx.critical_anomaly_score, to the current anomaly scores. The user can configure what each score represents from within the modsecurity_crs_10_config.conf file and these scores will be propagated out for use in the rules by using macro expansion. The following is an excerpt from modsecurity_crs_10_config.conf where that configuration is set:
+This adds a variable amount, tx.critical_anomaly_score, to the current anomaly scores. The user can configure what each score represents from within the csr-setup.conf file and these scores will be propagated out for use in the rules by using macro expansion. The following is an excerpt from csr-setup.conf where that configuration is set:
 
 .. code-block:: bash
 
@@ -146,7 +146,7 @@ This configuration would mean that every CRS rule that has a Severity rating of 
     Set variable "tx.anomaly_score" to "5".
     ...
 
-Now that we have the capability to do anomaly scoring, the next step is to set our thresholds.  This is the score value at which, if the current transactional score is above, it will be denied.  We have various different anomaly scoring thresholds to set for both specific vulnerability types and generic requests/response levels. These will be evaluated in two different files. Inbound request are evaluated at the end of phase:2 in the rules/REQUEST-49-BLOCKING-EVALUATION.conf file and outbound responses are evaluated at the end of phase:4 in the rules/RESPONSE-59-BLOCKING-EVALUATION.conf file. The thresholds are configured in the modsecurity_crs_10_config.conf file.
+Now that we have the capability to do anomaly scoring, the next step is to set our thresholds.  This is the score value at which, if the current transactional score is above, it will be denied.  We have various different anomaly scoring thresholds to set for both specific vulnerability types and generic requests/response levels. These will be evaluated in two different files. Inbound request are evaluated at the end of phase:2 in the rules/REQUEST-49-BLOCKING-EVALUATION.conf file and outbound responses are evaluated at the end of phase:4 in the rules/RESPONSE-59-BLOCKING-EVALUATION.conf file. The thresholds are configured in the csr-setup.conf file.
 
 
 .. code-block:: bash
@@ -176,7 +176,7 @@ With these current default settings, anomaly scoring mode will act similarly to 
 Enable/Disable Blocking
 -----------------------
 
-You are probably familiar with the SecRuleEngine directive which allows you to control blocking mode (On) vs. Detection mode (DetectionOnly).  With the Anomaly Scoring mode, if you want to allow blocking, you should set the SecRueEngine to On and then uncomment the following SecAction in the modsecurity_crs_10_config.conf file. Note: this is done by default in CRS 3.x:
+You are probably familiar with the SecRuleEngine directive which allows you to control blocking mode (On) vs. Detection mode (DetectionOnly).  With the Anomaly Scoring mode, if you want to allow blocking, you should set the SecRueEngine to On and then uncomment the following SecAction in the csr-setup.conf file. Note: this is done by default in CRS 3.x:
 
 
 .. code-block:: bash
