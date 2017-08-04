@@ -11,15 +11,23 @@ ID Reservations
 ---------------
 
 * 1-99,999; reserved for local (internal) use. Use as you see fit but do not use this range for rules that are distributed to others.
-* 100,000-199,999; reserved for internal use of the engine, to assign to rules that do not have explicit IDs.
-* 200,000-299,999; reserved for rules published at modsecurity.org.
+* 100,000–199,999; reserved for rules published by Oracle.
+* 200,000–299,999; reserved for rules published Comodo.
 * 300,000-399,999; reserved for rules published at gotroot.com.
-* 400,000-419,999; unused (available for reservation).
-* 420,000-429,999; reserved for ScallyWhack.
-* 430,000-699,999; unused (available for reservation).
+* 400,000–419,999; unused (available for reservation).
+* 420,000-429,999; reserved for ScallyWhack .
+* 430,000–439,999: reserved for rules published by Flameeyes
+* 440,000-599,999; unused (available for reservation).
+* 600,000-699,999; reserved for use by Akamai http://www.akamai.com/html/solutions/waf.html
 * 700,000-799,999; reserved for Ivan Ristic.
-* 900,000-999,999; reserved for the Core Rules project.
-* 1,000,000 and above; unused (available for reservation).
+* 900,000-999,999; reserved for the OWASP ModSecurity Core Rule Set project.
+* 1,000,000-1,009,999; reserved for rules published by Redhat Security Team
+* 1,010,000-1,999,999; unused (available for reservation)
+* 2,000,000-2,999,999; reserved for rules from Trustwave's SpiderLabs Research team
+* 3,000,000-3,999,999; reserved for use by Akamai 
+* 4,000,000-4,099,999; reserved in use by AviNetworks
+* 4,100,000 and above; unused (available for reservation)
+
 
 IDs in the OWASP CRS
 ====================
