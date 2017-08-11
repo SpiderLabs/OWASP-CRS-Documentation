@@ -26,7 +26,8 @@ ID Reservations
 * 2,000,000-2,999,999; reserved for rules from Trustwave's SpiderLabs Research team
 * 3,000,000-3,999,999; reserved for use by Akamai 
 * 4,000,000-4,099,999; reserved in use by AviNetworks
-* 4,100,000 and above; unused (available for reservation)
+* 4,100,000-4,199,999; reserved in use by Fastly
+* 4,200,000 and above; unused (available for reservation)
 
 
 IDs in the OWASP CRS
