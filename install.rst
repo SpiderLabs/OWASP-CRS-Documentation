@@ -141,7 +141,7 @@ Apache will include from the Apache Root directory (/etc/httpd/, /etc/apache2/, 
     
 Includes for Nginx
 -------------------
-Nginx will include from the Nginx conf directory (/usr/local/nginx/conf/ depending on the envirovment). Because only one 'ModSecurityConfig' directive can be specified within nginx.conf we reccomend naming that file modsec_includes.conf and including additional files from there. In the example below we copied our clones owasp-modsecurity-crs folder into our Nginx configuration directory. From there we specifying the appropertie include directives which will include OWASP CRS when the server is restarted. In the example below we have also included our modsecurity.conf file which includes reccomended configurations for ModSecurity
+Nginx will include from the Nginx conf directory (/usr/local/nginx/conf/ depending on the envirovment). Because only one 'ModSecurityConfig' directive can be specified within nginx.conf we reccomend naming that file modsec_includes.conf and including additional files from there. In the example below we copied our cloned owasp-modsecurity-crs folder into our Nginx configuration directory. From there we specifying the appropertie include directives which will include OWASP CRS when the server is restarted. In the example below we have also included our modsecurity.conf file which includes reccomended configurations for ModSecurity
 
 .. code-block:: bash
 
