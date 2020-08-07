@@ -1,4 +1,5 @@
+**** NOTE: The CRS documentation is no longer maintained at this location, please refer to https://coreruleset.org/ instead. ***
+
+
 Welcome to the OWASP Core Rule Set (CRS) documentation.
 This documentation is made in Sphinx and can be compiled on Windows using the make.bat or on Linux using the Makefile. 
-	
-Alternatively, the latest version of the documentation is available at https://www.modsecurity.org/CRS/Documentation/
